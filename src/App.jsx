@@ -60,7 +60,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Articles Fetched</h1>
+      <h1>{data.length==0?"Data is Fetching..":"Data Fetched successfully"}</h1>
       <ul className="flex flex-wrap justify-center justify-evenly">
         {data.map((article, index) => (
           <li key={index}>
