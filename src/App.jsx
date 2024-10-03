@@ -8,8 +8,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(
-          "https://thingproxy.freeboard.io/fetch/https://arxiv.org/search/?query=Hardware+architecture&searchtype=all&abstracts=show&order=-announced_date_first&size=50",
+        const res = await fetch('/api/proxy',
           {
             method: "GET",
           }
