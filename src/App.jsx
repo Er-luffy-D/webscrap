@@ -11,6 +11,9 @@ function App() {
         const res = await fetch(
           "https://thingproxy.freeboard.io/fetch/https://arxiv.org/search/?query=Hardware+architecture&searchtype=all&abstracts=show&order=-announced_date_first&size=50",
           {
+  mode: 'no-cors'
+},
+          {
             method: "GET",
           }
         );
