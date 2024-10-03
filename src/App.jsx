@@ -9,7 +9,7 @@ function App() {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "https://cors-anywhere.herokuapp.com/https://arxiv.org/search/?query=Hardware+architecture&searchtype=all&abstracts=show&order=-announced_date_first&size=50",
+          "https://thingproxy.freeboard.io/fetch/https://arxiv.org/search/?query=Hardware+architecture&searchtype=all&abstracts=show&order=-announced_date_first&size=50",
           {
             method: "GET",
           }
