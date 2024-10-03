@@ -10,9 +10,6 @@ function App() {
       try {
         const res = await fetch('/api/proxy',
           {
-  mode: 'no-cors'
-},
-          {
             method: "GET",
           }
         );
