@@ -1,10 +1,12 @@
 import "./App.css";
+import Shimmer from "./Components/Shimmer";
 import { SimpleCard } from "./SimpleCard"; // Ensure this component is correctly implemented
 import { useState, useEffect } from "react";
 
 function App() {
   const [data, setData] = useState([]); // Use camelCase for state variables
-  const query="Physics"
+  const [SearchText,setSearchText]=useState("Hardware architecture");
+  const query=SearchText;
   useEffect(() => {
     const fetchData = async (searchQuery) => {
       try {
@@ -57,9 +59,29 @@ function App() {
     fetchData(query); // Call the async function
   }, []); // Empty dependency array to run only once on mount
 
+  if(data.length==0){
+    return <Shimmer/>
+  }
+
+
+
+
   return (
     <div className="App">
       <h1>{data.length==0?"Data is Fetching..":"Data Fetched successfully"}</h1>
+      <div className="search">
+        <form onSubmit={(e)=>{
+          e.preventDefault();
+          // query=s
+        }}>
+          <input 
+          type="text"
+          value={SearchText}
+          onChange={(e)=>{
+            setSearchText(e.target.value);
+          }}/>
+        </form>
+      </div>
       <ul className="flex flex-wrap justify-center justify-evenly">
         {data.map((article, index) => (
           <li key={index}>
