@@ -68,10 +68,15 @@ function App() {
     const query = SearchText;
     fetchData(query);
   };
+  const isShimmer=()=>{
+    if(data.length==0){
+      return<Shimmer/>
+    }
+    else{
+      return null
+    }
+  }
 
-  // if(data.length==0){
-  //   return <Shimmer/>
-  // };
 
   return (
     <div className="App">
@@ -106,6 +111,8 @@ function App() {
       </div>
 
       <h2>Results for Search : {SearchQ}</h2>
+      {isShimmer()}
+      
       <ul className="flex flex-wrap justify-center justify-evenly">
         {data.map((article, index) => (
           <li key={index}>
