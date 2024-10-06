@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 
 function App() {
   const [data, setData] = useState([]); // Use camelCase for state variables
-
+  const query="Physics"
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (searchQuery) => {
       try {
-        const res = await fetch('/api/proxy',
+        const res = await fetch(`/api/proxy?search=${encodeURIComponent(searchQuery)}`,
           {
             method: "GET",
           }
@@ -54,7 +54,7 @@ function App() {
       }
     };
 
-    fetchData(); // Call the async function
+    fetchData(query); // Call the async function
   }, []); // Empty dependency array to run only once on mount
 
   return (
