@@ -68,22 +68,23 @@ function App() {
     const query = SearchText;
     fetchData(query);
   };
-  const isShimmer=()=>{
-    if(data.length==0){
-      return<Shimmer/>
-    }
-    else{
-      return null
-    }
+  const Cards=()=>{
+    return (
+    <ul className="flex flex-wrap justify-center justify-evenly">
+        {data.map((article, index) => (
+          <li key={index}>
+            <SimpleCard article={article} />
+          </li>
+        ))}
+      </ul>)
   }
-
 
   return (
     <div className="App">
-      <h1>
+      <h1 className="ml-2">
         {data.length == 0 ? "Data is Fetching.." : "Data Fetched successfully"}
       </h1>
-      <div className="search ml-1">
+      <div className="search ml-2">
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -110,16 +111,8 @@ function App() {
         </form>
       </div>
 
-      <h2>Results for Search : {SearchQ}</h2>
-      {isShimmer()}
-      
-      <ul className="flex flex-wrap justify-center justify-evenly">
-        {data.map((article, index) => (
-          <li key={index}>
-            <SimpleCard article={article} />
-          </li>
-        ))}
-      </ul>
+      <h2 className="ml-2 font-serif font-bold text-lg">Results for Search : {SearchQ}</h2>
+      {data.length==0 ? <Shimmer/> :<Cards/>}
     </div>
   );
 }
