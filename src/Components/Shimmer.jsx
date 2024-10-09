@@ -3,7 +3,6 @@ import {
     CardBody,
     CardFooter,
     Typography,
-    Button,
   } from "@material-tailwind/react";
   
 const Shimmer=()=>{
@@ -11,20 +10,26 @@ const Shimmer=()=>{
         return(
       <Card className="border-solid border-gray-600 bg-gray-800 border-4 mt-10 h-96 w-96 flex flex-col">
         <CardBody className="flex-1 overflow-hidden ">
-          <Typography variant="h5" color="blue-gray" className="mb-2 w-ful h-6 bg-gray-600">
+          <Typography variant="h5" color="blue-gray" className="mb-2 w-full h-6 bg-gray-600">
           </Typography>
           <Typography variant="h5" color="blue-gray" className="mb-2 w-full h-6 bg-gray-600">
           </Typography>
-            
+          <Typography variant="h5" color="blue-gray" className="mb-2 w-2/3 h-6 bg-gray-600">
+          </Typography>
           <Typography variant="h5" color="blue-gray" className="mb-2 w-1/2 h-6 bg-gray-600">
           </Typography>
+            
           <Typography variant="h5" color="blue-gray" className="mb-2 w-1/3 h-6 bg-gray-600">
           </Typography>
           <Typography variant="h5" color="blue-gray" className="mb-2 w-1/4 h-6 bg-gray-600">
           </Typography>
+          <Typography variant="h5" color="blue-gray" className="mb-2 w-1/6 h-6 bg-gray-600">
+          </Typography>
         </CardBody>
         <CardFooter className="pt-0">
-          <Button>Read More</Button>
+          <Typography variant="h5" color="blue-gray" className="border- mb-2 w-1/4 h-8 bg-gray-600">
+          </Typography>
+
         </CardFooter>
       </Card>)
     

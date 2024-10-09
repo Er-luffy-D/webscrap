@@ -3,19 +3,25 @@ import "./App.css";
 import Shimmer from "./Components/Shimmer";
 import { SimpleCard } from "./SimpleCard"; // Ensure this component is correctly implemented
 import { useState, useEffect } from "react";
+import Loader from "./Components/Loader";
 
 function App() {
   const [data, setData] = useState([]); // Use camelCase for state variables
   const [SearchText, setSearchText] = useState("");
   const [SearchQ, setSearchQ] = useState("Hardware Architechture");
+  const [isLoading, setIsLoading] = useState(true); // State to track if data is loading
+  const [firstLoad, setFirstLoad] = useState(true); // State to track if it is the initial load
   const query = SearchText;
   useEffect(() => {
     fetchData(query); // Call the async function
   }, []); // Empty dependency array to run only once on mount
   const fetchData = async (searchQuery) => {
+    setIsLoading(true);
     try {
       const res = await fetch(
-        `/api/proxy?search=${encodeURIComponent(searchQuery) || "hardware+architecture"}`,
+        `/api/proxy?search=${
+          encodeURIComponent(searchQuery) || "hardware+architecture"
+        }`,
         {
           method: "GET",
         }
@@ -59,28 +65,34 @@ function App() {
       );
 
       setData(articles);
+      setIsLoading(false);
+      setFirstLoad(false); // After the first load, set firstLoad to false
     } catch (error) {
       console.error("Failed to fetch data:", error);
+      setIsLoading(false);
     }
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     const query = SearchText;
+    setIsLoading(true); // Set loading true for new searches
     fetchData(query);
+
   };
-  const Cards=()=>{
+  const Cards = () => {
     return (
-    <ul className="flex flex-wrap justify-center justify-evenly">
+      <ul className="flex flex-wrap justify-center justify-evenly">
         {data.map((article, index) => (
           <li key={index}>
             <SimpleCard article={article} />
           </li>
         ))}
-      </ul>)
-  }
+      </ul>
+    );
+  };
 
   return (
-    <div className="App">
+    <div className="App h-screen">
       <h1 className="ml-2">
         {data.length == 0 ? "Data is Fetching.." : "Data Fetched successfully"}
       </h1>
@@ -102,8 +114,8 @@ function App() {
             variant="gradient"
             size="sm"
             ripple="light"
-            onClick={()=>{
-              setSearchQ(SearchText)
+            onClick={() => {
+              setSearchQ(SearchText);
             }}
           >
             Search
@@ -111,8 +123,10 @@ function App() {
         </form>
       </div>
 
-      <h2 className="ml-2 font-serif font-bold text-lg">Results for Search : {SearchQ}</h2>
-      {data.length==0 ? <Shimmer/> :<Cards/>}
+      <h2 className="ml-2 font-serif font-bold text-lg">
+        Results for Search : {SearchQ}
+      </h2>
+      {isLoading ? firstLoad ? <Shimmer /> : <Loader /> : <Cards />}
     </div>
   );
 }
