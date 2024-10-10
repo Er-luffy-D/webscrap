@@ -7,7 +7,7 @@ import {
 } from "@material-tailwind/react";
 export function SimpleCard(props) {
   const {article} = props;
-
+  
   return (
     <Card className="border-solid border-black-500 border-4 mt-10 h-96 w-full max-w-sm flex flex-col md:h-96 md:w-96">
       <CardBody className="flex-1 overflow-hidden">

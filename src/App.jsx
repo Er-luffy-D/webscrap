@@ -21,10 +21,9 @@ function App() {
     setIsLoading(true);
     try {
       const res = await fetch(
-        // `/api/proxy?search=${
-        //   encodeURIComponent(searchQuery) || "hardware+architecture"
-        // }`,
-        "https://arxiv.org/search/?query=hardware&searchtype=all&source=header",
+        `/api/proxy?search=${
+          encodeURIComponent(searchQuery) || "hardware+architecture"
+        }`,
         {
           method: "GET",
         }
