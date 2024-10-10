@@ -1,11 +1,10 @@
-import { Button } from "@material-tailwind/react";
-import { Spinner } from "@material-tailwind/react";
+import { Button ,Spinner,Alert} from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import "./App.css";
 import { SimpleCard } from "./SimpleCard"; // Ensure this component is correctly implemented
 import Shimmer from "./Components/Shimmer";
 import Loader from "./Components/Loader";
-import check from "./assets/check.svg"
+import check from "./assets/check.svg";
 
 function App() {
   const [data, setData] = useState([]); // Use camelCase for state variables
@@ -13,12 +12,29 @@ function App() {
   const [SearchQ, setSearchQ] = useState("Hardware Architechture");
   const [isLoading, setIsLoading] = useState(true); // State to track if data is loading
   const [firstLoad, setFirstLoad] = useState(true); // State to track if it is the initial load
+  const [hasTimedOut, setHasTimedOut] = useState(false); // State to track if timeout occurred
+  const [showToast, setShowToast] = useState(false); // Track toast visibility
+
   const query = SearchText;
+
   useEffect(() => {
     fetchData(query); // Call the async function
+
+    const timeoutId = setTimeout(() => {
+      if (isLoading) {
+        setHasTimedOut(true);
+        setShowToast(true); // Show toast on timeout
+        setIsLoading(false);
+
+      }
+    }, 10000);
+
+    return () => clearTimeout(timeoutId);
   }, []); // Empty dependency array to run only once on mount
   const fetchData = async (searchQuery) => {
     setIsLoading(true);
+    setHasTimedOut(false); // Reset timeout status on new fetch
+    setShowToast(false);
     try {
       const res = await fetch(
         `/api/proxy?search=${
@@ -96,45 +112,47 @@ function App() {
     );
   };
   const Check = () => {
-    return <span>
-      <img className="h-9 w-9" src={check} alt="Done!"></img>
-    </span>;
+    return (
+      <span>
+        <img className="h-9 w-9" src={check} alt="Done!"></img>
+      </span>
+    );
   };
+
   return (
     <div className="App ">
       <div className="flex justify-center align-middle border-b-4 border-blue-gray-50">
         <div className="flex-col flex-wrap justify-between align-middle mt-5">
-          <div className="flex justify-evenly"> 
-          <h1 className="inline">
-          {data.length == 0 ? <Spinner className="" /> : Check()}
-          </h1>
-          <div className="search inline-block">
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                value={SearchText}
-                className="border-black border p-1"
-                placeholder="Title"
-                onChange={(e) => {
-                  setSearchText(e.target.value);
-                }}
-              />
-              <Button
-                className="ml-2"
-                type="submit"
-                color="green"
-                variant="gradient"
-                size="sm"
-                ripple="light"
-                onClick={() => {
-                  setSearchQ(SearchText);
-                }}
-              >
-                Search
-              </Button>
-            </form>
-          </div>
-
+          <div className="flex justify-evenly">
+            <h1 className="inline">
+              {isLoading ? <Spinner className="h-7 w-7" /> : <Check />}
+            </h1>
+            <div className="search inline-block ml-5">
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  value={SearchText}
+                  className="border-black border p-1"
+                  placeholder="Title"
+                  onChange={(e) => {
+                    setSearchText(e.target.value);
+                  }}
+                />
+                <Button
+                  className="ml-2"
+                  type="submit"
+                  color="green"
+                  variant="gradient"
+                  size="sm"
+                  ripple="light"
+                  onClick={() => {
+                    setSearchQ(SearchText);
+                  }}
+                >
+                  Search
+                </Button>
+              </form>
+            </div>
           </div>
 
           <h2 className="ml-2 font-serif font-bold text-lg m-3 text-wrap">
@@ -142,7 +160,31 @@ function App() {
           </h2>
         </div>
       </div>
-      {isLoading ? firstLoad ? <Shimmer /> : <Loader /> : <Cards />}
+
+      {hasTimedOut ? (
+        <div className="flex justify-center items-center h-screen">
+          <h2 className="text-2xl text-red-500">404 Error: Request Timeout</h2>
+        </div>
+      ) : isLoading ? (
+        firstLoad ? (
+          <Shimmer />
+        ) : (
+          <Loader />
+        )
+      ) : (
+        <Cards />
+      )}
+
+      {showToast && (
+        <Alert
+          open={showToast}
+          onClose={() => setShowToast(false)}
+          color="red"
+          className="fixed bottom-4 right-4"
+        >
+          404 Error: Request took too long!
+        </Alert>
+      )}
     </div>
   );
 }
