@@ -1,9 +1,11 @@
 import { Button } from "@material-tailwind/react";
-import "./App.css";
-import Shimmer from "./Components/Shimmer";
-import { SimpleCard } from "./SimpleCard"; // Ensure this component is correctly implemented
+import { Spinner } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
+import "./App.css";
+import { SimpleCard } from "./SimpleCard"; // Ensure this component is correctly implemented
+import Shimmer from "./Components/Shimmer";
 import Loader from "./Components/Loader";
+import check from "./assets/check.svg"
 
 function App() {
   const [data, setData] = useState([]); // Use camelCase for state variables
@@ -47,6 +49,9 @@ function App() {
           })[0].childNodes[1].data;
           const dateText = datelement.trim().replace(";", "");
           const titleElement = article.querySelector(".title");
+          const link = article
+            .querySelector(".list-title")
+            .children[0].getAttribute("href");
           const abstractElement =
             article.querySelector(".abstract-full").textContent;
           const abstractText = abstractElement
@@ -60,6 +65,7 @@ function App() {
             abstract: abstractText
               ? abstractText.trim()
               : "No abstract available",
+            id: link,
           };
         }
       );
@@ -77,7 +83,6 @@ function App() {
     const query = SearchText;
     setIsLoading(true); // Set loading true for new searches
     fetchData(query);
-
   };
   const Cards = () => {
     return (
@@ -90,42 +95,50 @@ function App() {
       </ul>
     );
   };
-
+  const Check = () => {
+    return <span>
+      <img className="h-9 w-9 mt-10" src={check} alt="Done!"></img>
+    </span>;
+  };
   return (
-    <div className="App">
-      <h1 className="ml-2">
-        {data.length == 0 ? "Data is Fetching.." : "Data Fetched successfully"}
-      </h1>
-      <div className="search ml-2">
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={SearchText}
-            className="border-black border p-1"
-            placeholder="Title"
-            onChange={(e) => {
-              setSearchText(e.target.value);
-            }}
-          />
-          <Button
-            className="ml-2"
-            type="submit"
-            color="green"
-            variant="gradient"
-            size="sm"
-            ripple="light"
-            onClick={() => {
-              setSearchQ(SearchText);
-            }}
-          >
-            Search
-          </Button>
-        </form>
-      </div>
+    <div className="App ">
+      <div className="flex justify-center align-middle">
+        <h1 className="mx-2 inline">
+          {data.length == 0 ? <Spinner className="h-9 w-9 mt-10" /> : Check()}
+        </h1>
+        <div className="flex-col flex-wrap justify-between align-middle mt-10">
+          <div className="search ml-2">
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                value={SearchText}
+                className="border-black border p-1"
+                placeholder="Title"
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                }}
+              />
+              <Button
+                className="ml-2"
+                type="submit"
+                color="green"
+                variant="gradient"
+                size="sm"
+                ripple="light"
+                onClick={() => {
+                  setSearchQ(SearchText);
+                }}
+              >
+                Search
+              </Button>
+            </form>
+          </div>
 
-      <h2 className="ml-2 font-serif font-bold text-lg">
-        Results for Search : {SearchQ}
-      </h2>
+          <h2 className="ml-2 font-serif font-bold text-lg m-3 ">
+            Results for Search : {SearchQ}
+          </h2>
+        </div>
+      </div>
       {isLoading ? firstLoad ? <Shimmer /> : <Loader /> : <Cards />}
     </div>
   );

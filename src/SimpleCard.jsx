@@ -24,7 +24,7 @@ export function SimpleCard(props) {
         </Typography>
       </CardBody>
       <CardFooter className="pt-0">
-        <Button>Read More</Button>
+      <a href={article.id} target="_blank" ><Button>Read More</Button></a>
       </CardFooter>
     </Card>
   );
