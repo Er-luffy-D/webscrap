@@ -1,4 +1,4 @@
-import { Button ,Spinner,Alert} from "@material-tailwind/react";
+import { Button, Spinner, Alert } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import "./App.css";
 import { SimpleCard } from "./SimpleCard"; // Ensure this component is correctly implemented
@@ -12,34 +12,15 @@ function App() {
   const [SearchQ, setSearchQ] = useState("Hardware Architechture");
   const [isLoading, setIsLoading] = useState(true); // State to track if data is loading
   const [firstLoad, setFirstLoad] = useState(true); // State to track if it is the initial load
-  const [hasTimedOut, setHasTimedOut] = useState(false); // State to track if timeout occurred
-  const [showToast, setShowToast] = useState(false); // Track toast visibility
 
-  const query = SearchText;
-
-  useEffect(() => {
-    fetchData(query); // Call the async function
-
-    const timeoutId = setTimeout(() => {
-      if (isLoading) {
-        setHasTimedOut(true);
-        setShowToast(true); // Show toast on timeout
-        setIsLoading(false);
-
-      }
-    }, 10000);
-
-    return () => clearTimeout(timeoutId);
-  }, []); // Empty dependency array to run only once on mount
   const fetchData = async (searchQuery) => {
     setIsLoading(true);
-    setHasTimedOut(false); // Reset timeout status on new fetch
-    setShowToast(false);
     try {
       const res = await fetch(
-        `/api/proxy?search=${
-          encodeURIComponent(searchQuery) || "hardware+architecture"
-        }`,
+        // `/api/proxy?search=${
+        //   encodeURIComponent(searchQuery) || "hardware+architecture"
+        // }`,
+        "https://arxiv.org/search/?query=hardware&searchtype=all&source=header",
         {
           method: "GET",
         }
@@ -49,13 +30,13 @@ function App() {
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }
-
+      
       const text = await res.text();
-
+      
       // Create a DOM parser to parse the HTML string
       const parser = new DOMParser();
       const doc = parser.parseFromString(text, "text/html");
-
+      
       // Extract titles and abstracts
       const articles = Array.from(doc.querySelectorAll("li.arxiv-result")).map(
         (article) => {
@@ -66,26 +47,26 @@ function App() {
           const dateText = datelement.trim().replace(";", "");
           const titleElement = article.querySelector(".title");
           const link = article
-            .querySelector(".list-title")
-            .children[0].getAttribute("href");
+          .querySelector(".list-title")
+          .children[0].getAttribute("href");
           const abstractElement =
-            article.querySelector(".abstract-full").textContent;
+          article.querySelector(".abstract-full").textContent;
           const abstractText = abstractElement
-            .trim()
-            .replace("       △ Less", "");
+          .trim()
+          .replace("       △ Less", "");
           return {
             title: titleElement
-              ? titleElement.textContent.trim()
-              : "No title available",
+            ? titleElement.textContent.trim()
+            : "No title available",
             date: dateText ? dateText : "Dates Not found",
             abstract: abstractText
-              ? abstractText.trim()
-              : "No abstract available",
+            ? abstractText.trim()
+            : "No abstract available",
             id: link,
           };
         }
       );
-
+      
       setData(articles);
       setIsLoading(false);
       setFirstLoad(false); // After the first load, set firstLoad to false
@@ -94,11 +75,15 @@ function App() {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    fetchData(SearchQ); // Call the async function
+  }, [SearchQ]); // Whenever SearchQ change the useEffect will runs 
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const query = SearchText;
     setIsLoading(true); // Set loading true for new searches
-    fetchData(query);
+    SearchQ(SearchText)
   };
   const Cards = () => {
     return (
@@ -161,30 +146,7 @@ function App() {
         </div>
       </div>
 
-      {hasTimedOut ? (
-        <div className="flex justify-center items-center h-screen">
-          <h2 className="text-2xl text-red-500">404 Error: Request Timeout</h2>
-        </div>
-      ) : isLoading ? (
-        firstLoad ? (
-          <Shimmer />
-        ) : (
-          <Loader />
-        )
-      ) : (
-        <Cards />
-      )}
-
-      {showToast && (
-        <Alert
-          open={showToast}
-          onClose={() => setShowToast(false)}
-          color="red"
-          className="fixed bottom-4 right-4"
-        >
-          404 Error: Request took too long!
-        </Alert>
-      )}
+      {isLoading ? firstLoad ? <Shimmer /> : <Loader /> : <Cards />}
     </div>
   );
 }
