@@ -9,7 +9,7 @@ import check from "./assets/check.svg";
 function App() {
   const [data, setData] = useState([]); // Use camelCase for state variables
   const [SearchText, setSearchText] = useState("");
-  const [SearchQ, setSearchQ] = useState("Hardware Architechture");
+  const [SearchQ, setSearchQ] = useState("");
   const [isLoading, setIsLoading] = useState(true); // State to track if data is loading
   const [firstLoad, setFirstLoad] = useState(true); // State to track if it is the initial load
 
