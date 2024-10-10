@@ -92,7 +92,7 @@ function App() {
   };
 
   return (
-    <div className="App ">
+    <div className="App h-screen">
       <h1 className="ml-2">
         {data.length == 0 ? "Data is Fetching.." : "Data Fetched successfully"}
       </h1>
