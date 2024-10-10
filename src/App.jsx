@@ -21,9 +21,10 @@ function App() {
     setIsLoading(true);
     try {
       const res = await fetch(
-        `/api/proxy?search=${
-          encodeURIComponent(searchQuery) || "hardware+architecture"
-        }`,
+        // `/api/proxy?search=${
+        //   encodeURIComponent(searchQuery) || "hardware+architecture"
+        // }`,
+        "https://arxiv.org/search/?query=hardware&searchtype=all&source=header",
         {
           method: "GET",
         }
@@ -97,17 +98,18 @@ function App() {
   };
   const Check = () => {
     return <span>
-      <img className="h-9 w-9 mt-10" src={check} alt="Done!"></img>
+      <img className="h-9 w-9" src={check} alt="Done!"></img>
     </span>;
   };
   return (
     <div className="App ">
-      <div className="flex justify-center align-middle">
-        <h1 className="mx-2 inline">
-          {data.length == 0 ? <Spinner className="h-9 w-9 mt-10" /> : Check()}
-        </h1>
-        <div className="flex-col flex-wrap justify-between align-middle mt-10">
-          <div className="search ml-2">
+      <div className="flex justify-center align-middle border-b-4 border-blue-gray-50">
+        <div className="flex-col flex-wrap justify-between align-middle mt-5">
+          <div className="flex justify-evenly"> 
+          <h1 className="inline">
+          {data.length == 0 ? <Spinner className="" /> : Check()}
+          </h1>
+          <div className="search inline-block">
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
@@ -134,7 +136,9 @@ function App() {
             </form>
           </div>
 
-          <h2 className="ml-2 font-serif font-bold text-lg m-3 ">
+          </div>
+
+          <h2 className="ml-2 font-serif font-bold text-lg m-3 text-wrap">
             Results for Search : {SearchQ}
           </h2>
         </div>
