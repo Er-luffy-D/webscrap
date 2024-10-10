@@ -5,15 +5,9 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
-import { useNavigate } from 'react-router-dom';
-
 export function SimpleCard(props) {
   const {article} = props;
-  const navigate = useNavigate(); // Initialize navigate
 
-  const handleReadMore = () => {
-    navigate('/card'); // Navigate to /card on button click
-  };
   return (
     <Card className="border-solid border-black-500 border-4 mt-10 h-96 w-96 flex flex-col">
       <CardBody className="flex-1 overflow-hidden">
@@ -30,7 +24,7 @@ export function SimpleCard(props) {
         </Typography>
       </CardBody>
       <CardFooter className="pt-0">
-        <Button onClick={handleReadMore}>Read More</Button>
+        <Button>Read More</Button>
       </CardFooter>
     </Card>
   );
