@@ -1,4 +1,4 @@
-import { Button, Spinner, Alert } from "@material-tailwind/react";
+import { Button, Spinner } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import "./App.css";
 import { SimpleCard } from "./SimpleCard"; // Ensure this component is correctly implemented
@@ -9,7 +9,7 @@ import check from "./assets/check.svg";
 function App() {
   const [data, setData] = useState([]); // Use camelCase for state variables
   const [SearchText, setSearchText] = useState("");
-  const [SearchQ, setSearchQ] = useState("Hardware Architechture");
+  const [SearchQ, setSearchQ] = useState("");
   const [isLoading, setIsLoading] = useState(true); // State to track if data is loading
   const [firstLoad, setFirstLoad] = useState(true); // State to track if it is the initial load
 
@@ -109,14 +109,14 @@ function App() {
         <div className="flex-col flex-wrap justify-between align-middle mt-5">
           <div className="flex justify-evenly">
             <h1 className="inline">
-              {isLoading ? <Spinner className="h-7 w-7" /> : <Check />}
+              {isLoading ? <Spinner className="h-7 w-7 " /> : <Check />}
             </h1>
-            <div className="search inline-block ml-5">
+            <div className="search inline-block mx-3">
               <form onSubmit={handleSubmit}>
                 <input
                   type="text"
                   value={SearchText}
-                  className="border-black border p-1"
+                  className="border-black border p-1 rounded-md"
                   placeholder="Title"
                   onChange={(e) => {
                     setSearchText(e.target.value);
